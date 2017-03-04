@@ -20,7 +20,7 @@ let s:SLACK_API_DOMAIN = 'https://slack.com/api/'
 " Arguments: [path] Slack Web API path
 " Arguments: [...]  post data Dictionary
 " Return:    response Dictionary
-function! slack_files#api#helper#post(path, ...) "{{{
+function! slack_files#api#helper#post(path, ...) abort "{{{
   let data = get(a:000, 0, {})
   " to avoid infinite loop, dont use get() with default value
   if get(data, 'token') is 0
@@ -49,7 +49,7 @@ function! slack_files#api#helper#get(url) abort "{{{
   let res = s:HTTP.request(req)
   if res.status != '200'
     echomsg res.status
-    throw 'ERROR: Slack API network error'
+    throw 'slack_files: Slack API network error'
   endif
   return res.content
 endfunction "}}}
@@ -60,16 +60,16 @@ endfunction "}}}
 " parse Slack API response
 " Arguments: [res] Web.HTTP response
 " Return:    Web.HTTP content
-function! s:parse_response(res) "{{{
+function! s:parse_response(res) abort "{{{
   if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
     echomsg a:res
-    throw 'ERROR: Slack API network error'
+    throw 'slack_files: Slack API network error'
   endif
 
   let content = s:JSON.decode(a:res.content)
   if ! content.ok
     echomsg a:res.content
-    throw 'ERROR: Slack API error'
+    throw 'slack_files: Slack API error'
   endif
   return content
 endfunction "}}}

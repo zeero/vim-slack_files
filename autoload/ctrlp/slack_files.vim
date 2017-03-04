@@ -66,9 +66,6 @@ call add(g:ctrlp_ext_vars, {
   \ 'specinput': 0,
   \ })
 
-" TODO: キャッシュ制御どうするか
-let s:nocache = 0
-let s:cache_forced = 2
 
 " Provide a list of strings to search in
 "

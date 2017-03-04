@@ -18,7 +18,7 @@ set cpo&vim
 "                           'channels': comma-separated list of channel names or IDs where the file will be shared,
 "                         }
 " Return:    response Dictionary
-function! slack_files#api#files#upload(filename, contents, ...) "{{{
+function! slack_files#api#files#upload(filename, contents, ...) abort "{{{
   let config = get(a:000, 0, {})
   let title = get(config, 'title')
   let filetype = get(config, 'filetype')

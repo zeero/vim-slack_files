@@ -9,17 +9,17 @@ set cpo&vim
 
 " auth.test
 " Arguments: [token] Slack Web API token String
-function! slack_files#api#auth#test(token) "{{{
+function! slack_files#api#auth#test(token) abort "{{{
   if empty(a:token)
-    return 0
+    throw 'slack_files: token is empty'
   endif
 
   try
     call slack_files#api#helper#post('auth.test', {'token': a:token})
   catch
-    return 0
+    echomsg v:exception
+    throw 'slack_files: invalid token'
   endtry
-  return 1
 endfunction "}}}
 
 

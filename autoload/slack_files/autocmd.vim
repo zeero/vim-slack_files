@@ -7,7 +7,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-function! slack_files#autocmd#onBufWriteCmd() "{{{
+function! slack_files#autocmd#onBufWriteCmd() abort "{{{
   let bufname = expand('%')
   
   " check

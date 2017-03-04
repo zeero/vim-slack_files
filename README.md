@@ -7,6 +7,3 @@ Vim plugin for Slack Files.
 * Correspond for slack files pagenation. (current max is 100 files)
 * Support for Post filetype.
 
-## Attension
-* It doesn't support for files that includes slash in file title.
-

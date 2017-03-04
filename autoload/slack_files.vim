@@ -29,7 +29,6 @@ function! slack_files#open(url, id, filetype, title, ...) abort "{{{
   let opener = get(config, 'opener', 'edit')
 
   " check
-  " TODO: it cant handle files incluing slash in title
   if match(a:title, '\/') != -1
     echohl WarningMsg
     echo printf('ERROR: this plugin cant handle files including slash in title (title=%s)', a:title)
@@ -81,18 +80,15 @@ function! slack_files#get_token() abort "{{{
     for line in readfile(s:TOKEN_FILE)
       return line
     endfor
-    throw 'ERROR: token file is empty'
+    throw 'slack_files: token file is empty'
   else
     let token = input('Slack API Token: ')
-    if slack_files#api#auth#test(token)
-      if ! isdirectory(g:slack_files_token_dir)
-        call mkdir(g:slack_files_token_dir, 'p')
-      endif
-      call writefile([token], s:TOKEN_FILE)
-      return token
-    else
-      throw 'ERROR: invalid token'
+    call slack_files#api#auth#test(token)
+    if ! isdirectory(g:slack_files_token_dir)
+      call mkdir(g:slack_files_token_dir, 'p')
     endif
+    call writefile([token], s:TOKEN_FILE)
+    return token
   endif
 endfunction "}}}
 
