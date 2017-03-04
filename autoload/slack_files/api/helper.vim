@@ -9,22 +9,62 @@ set cpo&vim
 
 " Vital
 let s:V = vital#slack_files#new()
+let s:HTTP = s:V.import('Web.HTTP')
 let s:JSON = s:V.import('Web.JSON')
 
 " Const
-let s:SLACK_API_DOMAIN = 'https://slack.com/api'
+let s:SLACK_API_DOMAIN = 'https://slack.com/api/'
 
 
-" get Slack API domain
-function! slack_files#api#helper#api_domain() "{{{
-  return s:SLACK_API_DOMAIN
+" post to Slack Web API
+" Arguments: [path] Slack Web API path
+" Arguments: [...]  post data Dictionary
+" Return:    response Dictionary
+function! slack_files#api#helper#post(path, ...) "{{{
+  let data = get(a:000, 0, {})
+  " to avoid infinite loop, dont use get() with default value
+  if get(data, 'token') is 0
+    let data.token = slack_files#get_token()
+  endif
+
+  let req = {}
+  let req.url = s:SLACK_API_DOMAIN . a:path
+  let req.method = 'post'
+  let req.data = s:HTTP.encodeURI(data)
+
+  let res = s:HTTP.request(req)
+  return s:parse_response(res)
 endfunction "}}}
+
+" download slack file & return contents
+" Arguments: [url] slack file url_private
+" Return:    contents String
+function! slack_files#api#helper#get(url) abort "{{{
+  let req = {}
+  let req.url = a:url
+  let req.method = 'get'
+  let req.headers = {}
+  let req.headers.Authorization = printf('Bearer %s', slack_files#get_token())
+
+  let res = s:HTTP.request(req)
+  if res.status != '200'
+    echomsg res.status
+    throw 'ERROR: Slack API network error'
+  endif
+  return res.content
+endfunction "}}}
+
+
+" Private Functions
 
 " parse Slack API response
 " Arguments: [res] Web.HTTP response
 " Return:    Web.HTTP content
-function! slack_files#api#helper#parse_response(res) "{{{
-  call slack_files#api#helper#check_http_status(a:res.status)
+function! s:parse_response(res) "{{{
+  if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
+    echomsg a:res
+    throw 'ERROR: Slack API network error'
+  endif
 
   let content = s:JSON.decode(a:res.content)
   if ! content.ok
@@ -34,13 +74,7 @@ function! slack_files#api#helper#parse_response(res) "{{{
   return content
 endfunction "}}}
 
-" check http status
-function! slack_files#api#helper#check_http_status(status) "{{{
-  if a:status != '200'
-    echomsg a:status
-    throw 'ERROR: Slack API network error'
-  endif
-endfunction "}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+

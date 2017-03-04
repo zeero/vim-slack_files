@@ -53,9 +53,9 @@ endfunction "}}}
 " Return:    is slack buffer name or not
 function! slack_files#util#is_slack_buffer(bufname) "{{{
   if match(a:bufname, s:PREFIX_BUFNAME) == 0
-    return v:true
+    return 1
   endif
-  return v:false
+  return 0
 endfunction "}}}
 
 " get slack buffer prefix

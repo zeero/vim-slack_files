@@ -7,30 +7,19 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-" Vital
-let s:V = vital#slack_files#new()
-let s:HTTP = s:V.import('Web.HTTP')
-
-
+" auth.test
+" Arguments: [token] Slack Web API token String
 function! slack_files#api#auth#test(token) "{{{
   if empty(a:token)
-    return v:false
+    return 0
   endif
 
-  let req = {}
-  let req.url = slack_files#api#helper#api_domain() . '/auth.test'
-  let req.method = 'post'
-  let data = {}
-  let data.token = a:token
-  let req.data = s:HTTP.encodeURI(data)
-
   try
-    let res = s:HTTP.request(req)
-    call slack_files#api#helper#parse_response(res)
+    call slack_files#api#helper#post('auth.test', {'token': a:token})
   catch
-    return v:false
+    return 0
   endtry
-  return v:true
+  return 1
 endfunction "}}}
 
 

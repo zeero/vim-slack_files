@@ -25,7 +25,7 @@ function! slack_files#autocmd#onBufWriteCmd() "{{{
   let res = slack_files#write(filename, contents, config)
 
   " delete old file
-  call slack_files#delete(info.id)
+  call slack_files#api#files#delete(info.id)
 endfunction "}}}
 
 

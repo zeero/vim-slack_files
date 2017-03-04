@@ -1,6 +1,6 @@
 " =============================================================================
 " File:          autoload/slack_files.vim
-" Description:   Vim plugin for Slack Files.
+" Description:   Main Functions
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -9,8 +9,6 @@ set cpo&vim
 
 " Vital
 let s:V = vital#slack_files#new()
-let s:HTTP = s:V.import('Web.HTTP')
-let s:JSON = s:V.import('Web.JSON')
 let s:Buffer = s:V.import('Vim.Buffer')
 
 " Const
@@ -19,22 +17,6 @@ let s:TOKEN_FILE = g:slack_files_token_dir . '/token'
 
 
 " Functions
-
-" get file list
-" Return: List with slack file Dictionary
-function! slack_files#list() abort "{{{
-  let req = {}
-  let req.url = s:SLACK_API_DOMAIN . '/files.list'
-  let req.method = 'post'
-  let data = {}
-  let data.token = slack_files#get_token()
-  let data.types = g:slack_files_list_types
-  let req.data = s:HTTP.encodeURI(data)
-
-  let res = s:parse_response(s:HTTP.request(req))
-
-  return res.files
-endfunction "}}}
 
 " open slack buffer
 " Arguments: [url]      slack file url
@@ -59,22 +41,8 @@ function! slack_files#open(url, id, filetype, title, ...) abort "{{{
   let bufname = slack_files#util#info2bufname(a:url, a:id, a:filetype, a:title)
   call s:Buffer.open(bufname, opener)
   set buftype=acwrite
-  call call(s:Buffer.edit_content, [slack_files#read(a:url)], s:Buffer)
-endfunction "}}}
-
-" download slack file & return contents
-" Arguments: [url] slack file url_private
-" Return:    lines List of slack file content
-function! slack_files#read(url) abort "{{{
-  let req = {}
-  let req.url = a:url
-  let req.method = 'get'
-  let req.headers = {}
-  let req.headers.Authorization = printf('Bearer %s', slack_files#get_token())
-
-  let res = s:HTTP.request(req)
-  call s:check_http_status(res.status)
-  return split(res.content, '\r\?\n')
+  let contents = split(slack_files#api#helper#get(a:url), '\r\?\n')
+  call call(s:Buffer.edit_content, [contents], s:Buffer)
 endfunction "}}}
 
 " upload slack file
@@ -91,7 +59,7 @@ function! slack_files#write(filename, contents, ...) abort "{{{
   let config = get(a:000, 0, {})
 
   " upload
-  let res = slack_files#upload(a:filename, a:contents, config)
+  let res = slack_files#api#files#upload(a:filename, a:contents, config)
 
   " replace buffer
   let new_url = res.file.url_private
@@ -104,66 +72,6 @@ function! slack_files#write(filename, contents, ...) abort "{{{
   set buftype=acwrite
   call call(s:Buffer.edit_content, [a:contents], s:Buffer)
   doautocmd BufReadPost
-endfunction "}}}
-
-" upload file
-" Arguments: [filename] file name
-" Arguments: [contents] List of file content lines
-" Arguments: [...]      config Dictionary
-"                         {
-"                           'title':    title of file,
-"                           'filetype': a file type identifier,
-"                           'comment':  initial comment to add to file,
-"                           'channels': comma-separated list of channel names or IDs where the file will be shared,
-"                         }
-" Return:    file.upload API response Dictionary
-function! slack_files#upload(filename, contents, ...) "{{{
-  let config = get(a:000, 0, {})
-  let title = get(config, 'title')
-  let filetype = get(config, 'filetype')
-  let comment = get(config, 'comment')
-  let channels = get(config, 'channels')
-
-  let req = {}
-  let req.url = s:SLACK_API_DOMAIN . '/files.upload'
-  let req.method = 'post'
-  let data = {}
-  let data.token = slack_files#get_token()
-  let data.filename = a:filename
-  let data.content = join(a:contents, "\n")
-  if title isnot 0
-    let data.title = title
-  endif
-  if filetype isnot 0
-    let data.filetype = filetype
-  endif
-  if comment isnot 0
-    let data.initial_comment = comment
-  endif
-  if channels isnot 0
-    let data.channels = channels
-  endif
-  let req.data = s:HTTP.encodeURI(data)
-
-  return s:parse_response(s:HTTP.request(req))
-endfunction "}}}
-
-" delete slack file
-" Arguments: [id] slack file ID
-function! slack_files#delete(id) abort "{{{
-  let req = {}
-  let req.url = s:SLACK_API_DOMAIN . '/files.delete'
-  let req.method = 'post'
-  let data = {}
-  let data.token = slack_files#get_token()
-  let data.file = a:id
-  let req.data = s:HTTP.encodeURI(data)
-
-  call s:parse_response(s:HTTP.request(req))
-endfunction "}}}
-
-" create slack file from buffer
-function! slack_files#create() abort "{{{
 endfunction "}}}
 
 " get token
@@ -186,30 +94,6 @@ function! slack_files#get_token() abort "{{{
       throw 'ERROR: invalid token'
     endif
   endif
-endfunction "}}}
-
-
-" Private Functions
-
-" check http status
-function! s:check_http_status(status) "{{{
-  if a:status != '200'
-    throw 'ERROR: Slack API network error'
-  endif
-endfunction "}}}
-
-" parse Slack API response
-" Arguments: [res] Web.HTTP response
-" Return:    Web.HTTP content
-function! s:parse_response(res) "{{{
-  call s:check_http_status(a:res.status)
-
-  let content = s:JSON.decode(a:res.content)
-  if ! content.ok
-    echomsg a:res.content
-    throw 'ERROR: Slack API error'
-  endif
-  return content
 endfunction "}}}
 
 

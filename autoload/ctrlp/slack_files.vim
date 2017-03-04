@@ -75,7 +75,7 @@ let s:cache_forced = 2
 " Return: a Vim's List
 "
 function! ctrlp#slack_files#init() "{{{
-  let files = slack_files#list()
+  let files = slack_files#api#files#list().files
   call sort(files, 's:sort_by_updated')
 
   " make slack file list

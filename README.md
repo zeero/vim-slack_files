@@ -3,8 +3,10 @@
 # vim-slack_files
 Vim plugin for Slack Files.
 
-# Todos
-* correspond for slack files pagenation. (current max is 100 files)
-* support for Post filetype.
-* support for files that includes slash in file title.
+## Todos
+* Correspond for slack files pagenation. (current max is 100 files)
+* Support for Post filetype.
+
+## Attension
+* It doesn't support for files that includes slash in file title.
 
