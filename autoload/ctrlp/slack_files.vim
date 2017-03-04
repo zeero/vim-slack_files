@@ -56,6 +56,7 @@ let g:loaded_ctrlp_slack_files = 1
 call add(g:ctrlp_ext_vars, {
   \ 'init': 'ctrlp#slack_files#init()',
   \ 'accept': 'ctrlp#slack_files#accept',
+  \ 'wipe': 'ctrlp#slack_files#wipe',
   \ 'lname': 'slack_files',
   \ 'sname': 'slack',
   \ 'type': 'line',
@@ -64,6 +65,7 @@ call add(g:ctrlp_ext_vars, {
   \ 'opts': 'ctrlp#slack_files#opts()',
   \ 'sort': 0,
   \ 'specinput': 0,
+  \ 'opmul': 1,
   \ })
 
 
@@ -125,6 +127,21 @@ function! ctrlp#slack_files#accept(mode, str) "{{{
   let url = get(strs, 2)
   let id = get(strs, 3)
   call slack_files#open(url, id, filetype, title, {'opener': opener[a:mode]})
+endfunction "}}}
+
+
+" The action to wipe on the selected string
+"
+" Arguments:
+"  a:entries   List of the selected string
+"
+function! ctrlp#slack_files#wipe(entries) "{{{
+  for item in a:entries
+    let strs = split(item, '\t')
+    let id = get(strs, 3)
+    call slack_files#api#files#delete(id)
+  endfor
+  return ctrlp#slack_files#init()
 endfunction "}}}
 
 
