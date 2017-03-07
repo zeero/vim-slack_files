@@ -47,10 +47,7 @@ function! slack_files#api#helper#get(url) abort "{{{
   let req.headers.Authorization = printf('Bearer %s', slack_files#get_token())
 
   let res = s:HTTP.request(req)
-  if res.status != '200'
-    echomsg res.status
-    throw 'slack_files: Slack API network error'
-  endif
+  call s:check_http_status(res)
   return res.content
 endfunction "}}}
 
@@ -61,10 +58,7 @@ endfunction "}}}
 " Arguments: [res] Web.HTTP response
 " Return:    Web.HTTP content
 function! s:parse_response(res) abort "{{{
-  if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
-    echomsg a:res
-    throw 'slack_files: Slack API network error'
-  endif
+  call s:check_http_status(a:res)
 
   let content = s:JSON.decode(a:res.content)
   if ! content.ok
@@ -72,6 +66,15 @@ function! s:parse_response(res) abort "{{{
     throw 'slack_files: Slack API error'
   endif
   return content
+endfunction "}}}
+
+" check http status
+" Arguments: [res] Web.HTTP response
+function! s:check_http_status(res) abort "{{{
+  if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
+    echomsg a:res
+    throw 'slack_files: Slack API network error'
+  endif
 endfunction "}}}
 
 
