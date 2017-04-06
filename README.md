@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zeero/vim-slack_files.svg?branch=master)](https://travis-ci.org/zeero/vim-slack_files)
+[![Build status](https://ci.appveyor.com/api/projects/status/aq6d1btnvayn42li?svg=true)](https://ci.appveyor.com/project/zeero/vim-slack-files)
 [![Powered by vital.vim](https://img.shields.io/badge/powered%20by-vital.vim-80273f.svg)](https://github.com/vim-jp/vital.vim)
 
 # vim-slack_files

@@ -1,0 +1,3 @@
+call themis#option('recursive', 1)
+call themis#option('reporter', 'dot')
+call themis#option('runtimepath', [$HOME.'/.vim/dein/repos/github.com/kannokanno/vmock'])
