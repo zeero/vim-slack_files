@@ -72,7 +72,7 @@ endfunction "}}}
 " Arguments: [res] Web.HTTP response
 function! s:check_http_status(res) abort "{{{
   if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
-    echomsg a:res
+    echomsg string(a:res)
     throw 'slack_files: Slack API network error'
   endif
 endfunction "}}}
