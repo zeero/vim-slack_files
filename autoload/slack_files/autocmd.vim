@@ -7,25 +7,25 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-function! slack_files#autocmd#onBufWriteCmd() abort "{{{
-  let bufname = expand('%')
-  
+" upload slack buffer
+" Arguments: [bufname] slack buffer name
+function! slack_files#autocmd#onBufWriteCmd(bufname) abort "{{{
   " check
-  if ! slack_files#util#is_slack_buffer(bufname)
+  if ! slack_files#util#is_slack_buffer(a:bufname)
     echohl WarningMsg
     echo 'ERROR: this buffer is not slack buffer'
     echohl None
     return
   endif
 
-  let info = slack_files#util#bufname2info(bufname)
+  let info = slack_files#util#bufname2info(a:bufname)
   let filename = substitute(info.url, '.*\/', '', '')
   let contents = getline('0', '$')
   let config = {'title': info.title, 'filetype': info.filetype}
   let res = slack_files#write(filename, contents, config)
 
   " delete old file
-  call slack_files#api#files#delete(info.id)
+  return slack_files#api#files#delete(info.id)
 endfunction "}}}
 
 
