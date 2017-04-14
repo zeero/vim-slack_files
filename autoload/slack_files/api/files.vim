@@ -47,7 +47,7 @@ endfunction "}}}
 " files.list
 " Return: response Dictionary
 function! slack_files#api#files#list() abort "{{{
-  return slack_files#api#helper#post('files.list', {'types': g:slack_files_list_types})
+  return slack_files#api#helper#post('files.list', {'types': g:slack_files#list_types})
 endfunction "}}}
 
 " files.delete
