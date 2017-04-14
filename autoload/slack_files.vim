@@ -7,15 +7,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-" Vital
-let s:V = vital#slack_files#new()
-let s:Buffer = s:V.import('Vim.Buffer')
-
-" Const
-let s:SLACK_API_DOMAIN = 'https://slack.com/api'
-let s:TOKEN_FILE = g:slack_files_token_dir . '/token'
-
-
 " Functions
 
 " open slack buffer
@@ -36,12 +27,10 @@ function! slack_files#open(url, id, filetype, title, ...) abort "{{{
     return
   endif
 
-  " open new buffer
+  " open new slack buffer
   let bufname = slack_files#util#info2bufname(a:url, a:id, a:filetype, a:title)
-  call s:Buffer.open(bufname, opener)
-  set buftype=acwrite
   let contents = split(slack_files#api#helper#get(a:url), '\r\?\n')
-  call call(s:Buffer.edit_content, [contents], s:Buffer)
+  call slack_files#buffer#open(bufname, opener, contents)
 endfunction "}}}
 
 " upload slack file
@@ -67,17 +56,16 @@ function! slack_files#write(filename, contents, ...) abort "{{{
   let new_title = res.file.title
   let new_bufname = slack_files#util#info2bufname(new_url, new_id, new_filetype, new_title)
   setlocal nomodified
-  call s:Buffer.open(new_bufname, 'edit')
-  set buftype=acwrite
-  call call(s:Buffer.edit_content, [a:contents], s:Buffer)
-  doautocmd BufReadPost
+  call slack_files#buffer#open(new_bufname, 'edit', a:contents)
 endfunction "}}}
 
 " get token
 " Return: Slack API token String
 function! slack_files#get_token() abort "{{{
-  if filereadable(s:TOKEN_FILE)
-    for line in readfile(s:TOKEN_FILE)
+  let token_file = g:slack_files_token_dir . '/token'
+
+  if filereadable(token_file)
+    for line in readfile(token_file)
       return line
     endfor
     throw 'slack_files: token file is empty'
@@ -87,7 +75,7 @@ function! slack_files#get_token() abort "{{{
     if ! isdirectory(g:slack_files_token_dir)
       call mkdir(g:slack_files_token_dir, 'p')
     endif
-    call writefile([token], s:TOKEN_FILE)
+    call writefile([token], token_file)
     return token
   endif
 endfunction "}}}
