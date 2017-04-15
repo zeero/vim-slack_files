@@ -1,7 +1,9 @@
 before_script:
 - git clone https://github.com/thinca/vim-themis /tmp/vim-themis
+- git clone https://github.com/kannokanno/vmock /tmp/vmock
+- git clone https://github.com/ctrlpvim/ctrlp.vim /tmp/ctrlp
 script:
-- "/tmp/vim-themis/bin/themis"
+- "/tmp/vim-themis/bin/themis --runtimepath /tmp/vmock:/tmp/ctrlp"
 notifications:
   slack:
     secure: j3fudmOeDf8MkopHEo+dAPj6nEKLLUUdj01B3uNl4g88FtREuDVwOGCmkjwG3TTkpAQiiF5+o6dfWydn9a3Dk+Wtg6CCSQtnzo0tE4B00RPIeo1cv4B24w1tuctEf6U9a4f0pzSUxWY+nM4SJa15DVlKi/TfrlrKZv6UMayHH2wmqFnFZMtbODLOyPXk5i/dAxUYvdGfEumFSZNxk3pgjlp+2DlKgY6sAdoi+VQIaPNkv8017KEe5wqnLcWu5fV6nO1LdrahD4N7EXaVuTSmlnXEk4q820GahBzUI4iY9ay+aTdXrLL6Sazqn69ERPt0YV+rECEVjkxfNklk7uVURXSwYU2mIyMupKmPmn64y+GmWJ7wht0yP8iP5Y27mVydmmDvyQzobJisyKxPNc7XUaSl4yosyjK1DpRHlBmhs9nYQcjCrr1urwt0GY4UTGQp1f4DmwuCzCJfIj30lx6eSKeht61q67tf9UAEjtRKpLHDUzM0PFOJdXntKx4nYMyDCzRD+EnjNF59vPgsLeWp5jW+E2Px00nXVo+R42TqaJ+f9zLS4TVj+uTIej1nTNY7BVFnyVFfpmuWIfA2ypEvOFs5crBAOcjpMcVg2x1DFkNweYQBvc/9OvQ6jbeWVPr0wgQysHtMeC7bC4c0EaDd4aiLtwZY3PyajXN3OXVRXO4=
