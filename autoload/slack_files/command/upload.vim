@@ -33,7 +33,7 @@ function! slack_files#command#upload#call(qargs) abort "{{{
   if channels isnot 0
     let config.channels = chennels
   endif
-  let res = slack_files#write(filename, contents, config)
+  return slack_files#write(filename, contents, config)
 endfunction "}}}
 
 " define options
@@ -48,9 +48,9 @@ function! slack_files#command#upload#filetype_completion(optlead, cmdline, curso
 endfunction "}}}
 
 " completion for command
-function! slack_files#command#upload#completion(arglead, cmdline, cursorpos)
+function! slack_files#command#upload#completion(arglead, cmdline, cursorpos) "{{{
   return s:parser.complete(a:arglead, a:cmdline, a:cursorpos)
-endfunction
+endfunction "}}}
 
 
 let &cpo = s:save_cpo
