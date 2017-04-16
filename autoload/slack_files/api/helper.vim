@@ -24,7 +24,7 @@ function! slack_files#api#helper#post(path, ...) abort "{{{
   let data = get(a:000, 0, {})
   " to avoid infinite loop, dont use get() with default value
   if get(data, 'token') is 0
-    let data.token = slack_files#get_token()
+    let data.token = slack_files#common#get_token()
   endif
 
   let req = {}
@@ -44,7 +44,7 @@ function! slack_files#api#helper#get(url) abort "{{{
   let req.url = a:url
   let req.method = 'get'
   let req.headers = {}
-  let req.headers.Authorization = printf('Bearer %s', slack_files#get_token())
+  let req.headers.Authorization = printf('Bearer %s', slack_files#common#get_token())
 
   let res = s:HTTP.request(req)
   call s:check_http_status(res)

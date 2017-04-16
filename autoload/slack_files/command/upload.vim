@@ -33,7 +33,7 @@ function! slack_files#command#upload#call(qargs) abort "{{{
   if channels isnot 0
     let config.channels = chennels
   endif
-  return slack_files#write(filename, contents, config)
+  return slack_files#common#write(filename, contents, config)
 endfunction "}}}
 
 " define options

@@ -11,7 +11,7 @@ set cpo&vim
 " Arguments: [bufname] slack buffer name
 function! slack_files#autocmd#onBufReadCmd(bufname) "{{{
   let info = slack_files#util#bufname2info(a:bufname)
-  call slack_files#open(info.url, info.id, info.filetype, info.title)
+  call slack_files#common#open(info.url, info.id, info.filetype, info.title)
 endfunction "}}}
 
 " upload slack buffer
@@ -29,7 +29,7 @@ function! slack_files#autocmd#onBufWriteCmd(bufname) abort "{{{
   let filename = substitute(info.url, '.*\/', '', '')
   let contents = getline('0', '$')
   let config = {'title': info.title, 'filetype': info.filetype}
-  let res = slack_files#write(filename, contents, config)
+  let res = slack_files#common#write(filename, contents, config)
 
   " delete old file
   return slack_files#api#files#delete(info.id)
@@ -38,3 +38,4 @@ endfunction "}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+

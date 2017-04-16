@@ -15,7 +15,7 @@ function! s:suite.onBufReadCmd() "{{{
   let id = 'dummy_id'
   let bufname = slack_files#util#info2bufname(url, id, filetype, title)
   try
-    call vmock#mock('slack_files#open').with(url, id, filetype, title).return('mock value').once()
+    call vmock#mock('slack_files#common#open').with(url, id, filetype, title).return('mock value').once()
     call slack_files#autocmd#onBufReadCmd(bufname)
     
     call vmock#verify()
@@ -32,7 +32,7 @@ function! s:suite.onBufWriteCmd()
 
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#write').return(expected . ' for write').once()
+    call vmock#mock('slack_files#common#write').return(expected . ' for write').once()
     call vmock#mock('slack_files#api#helper#post').return(expected).once()
     let actual = slack_files#autocmd#onBufWriteCmd('vimslackfiles://this.is.slack.buffer/url/ID/filetype/title')
     call s:assert.equals(actual, expected)

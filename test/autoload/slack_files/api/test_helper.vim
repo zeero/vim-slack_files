@@ -2,12 +2,12 @@ let s:suite = themis#suite('Test for autoload/slack_files/api/helper.vim -')
 let s:assert = themis#helper('assert')
 
 function! s:suite.after() "{{{
-  exe 'source autoload/slack_files.vim'
+  exe 'source autoload/slack_files/common.vim'
 endfunction "}}}
 
 function! s:suite.post()
   try
-    call vmock#mock('slack_files#get_token').return('').once()
+    call vmock#mock('slack_files#common#get_token').return('').once()
     let actual = slack_files#api#helper#post('api.test', {})
     let expected = {
     \ 'args': {
