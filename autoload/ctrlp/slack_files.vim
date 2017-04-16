@@ -75,7 +75,7 @@ call add(g:ctrlp_ext_vars, {
 "
 function! ctrlp#slack_files#init() "{{{
   let files = slack_files#api#files#list().files
-  call sort(files, 's:sort_by_updated')
+  call sort(files, 'slack_files#util#sort_slack_files')
 
   " make slack file list
   let list = []
@@ -96,12 +96,6 @@ function! ctrlp#slack_files#init() "{{{
   syn match CtrlPSlackFilesURLAndID 'https:\/\/.\+'
 
   return list
-endfunction "}}}
-
-function! s:sort_by_updated(i1, i2) "{{{
-  let time1 = str2nr(a:i1.timestamp)
-  let time2 = str2nr(a:i2.timestamp)
-  return time1 == time2 ? 0 : time1 < time2 ? 1 : -1
 endfunction "}}}
 
 

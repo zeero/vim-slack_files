@@ -64,6 +64,14 @@ function! slack_files#util#prefix_bufname() "{{{
   return s:PREFIX_BUFNAME
 endfunction "}}}
 
+" sort file list by update time desc
+function! slack_files#util#sort_slack_files(i1, i2) "{{{
+  let time1 = str2nr(a:i1.timestamp)
+  let time2 = str2nr(a:i2.timestamp)
+  return time1 == time2 ? 0 : time1 < time2 ? 1 : -1
+endfunction "}}}
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
