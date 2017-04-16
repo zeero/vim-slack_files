@@ -100,19 +100,15 @@ function! s:suite.write()
 endfunction
 
 function! s:suite.get_token_returns_first_line_of_token_file()
-  let slack_files_token_file = g:slack_files#token_file
-
   let g:slack_files#token_file = 'test/fixtures/token/valid_token'
   let actual = slack_files#common#get_token()
   let expected = 'dummy_token'
   call s:assert.equals(actual, expected)
 
-  let g:slack_files#token_file = slack_files_token_file
+  unlet g:slack_files#token_file
 endfunction
 
 function! s:suite.get_token_throw_exception_when_token_file_is_empty()
-  let slack_files_token_file = g:slack_files#token_file
-
   let g:slack_files#token_file = 'test/fixtures/token/empty_token'
   try
     call slack_files#common#get_token()
@@ -121,7 +117,7 @@ function! s:suite.get_token_throw_exception_when_token_file_is_empty()
     call s:assert.true(1)
     return
   finally
-    let g:slack_files#token_file = slack_files_token_file
+    unlet g:slack_files#token_file
   endtry
   call s:assert.fail('Unreachable')
 endfunction

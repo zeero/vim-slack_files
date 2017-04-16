@@ -12,10 +12,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-" Variables
-let g:slack_files#list_types = get(g:, 'slack_files#list_types', 'snippets')
-let g:slack_files#token_file = get(g:, 'slack_files#token_file', $HOME . '/.cache/vim-slack_files/token')
-
 " Commands
 command! -nargs=* -complete=customlist,slack_files#command#upload#completion SlackFilesUpload call slack_files#command#upload#call(<q-args>)
 command! -bar CtrlPSlackFiles call ctrlp#init(ctrlp#slack_files#id())

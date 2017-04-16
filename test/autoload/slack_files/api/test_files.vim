@@ -64,7 +64,7 @@ endfunction
 function! s:suite.list()
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#api#helper#post').with('files.list', {'types': g:slack_files#list_types}).return(expected).once()
+    call vmock#mock('slack_files#api#helper#post').with('files.list', {'types': slack_files#list_types()}).return(expected).once()
     let actual = slack_files#api#files#list()
     call s:assert.equals(actual, expected)
 
