@@ -120,7 +120,7 @@ function! ctrlp#slack_files#accept(mode, str) "{{{
   let filetype = substitute(get(strs, 1), '[<>]', '', 'g')
   let url = get(strs, 2)
   let id = get(strs, 3)
-  call slack_files#open(url, id, filetype, title, {'opener': opener[a:mode]})
+  exe opener[a:mode] slack_files#util#info2bufname(url, id, filetype, title)
 endfunction "}}}
 
 

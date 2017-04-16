@@ -5,6 +5,27 @@ function! s:suite.after() "{{{
   " exe 'source autoload/slack_files/api/helper.vim'
 endfunction "}}}
 
+function! s:suite.onBufReadCmd() "{{{
+  " TODO
+  call s:assert.skip('TODO: vmock cant work with variable args.')
+
+  let title = 'dummy_title'
+  let filetype = 'dummy_filetype'
+  let url = 'dummy_url'
+  let id = 'dummy_id'
+  let bufname = slack_files#util#info2bufname(url, id, filetype, title)
+  try
+    call vmock#mock('slack_files#open').with(url, id, filetype, title).return('mock value').once()
+    call slack_files#autocmd#onBufReadCmd(bufname)
+    
+    call vmock#verify()
+  catch
+    echoerr v:exception
+  finally
+    call vmock#clear()
+  endtry
+endfunction "}}}
+
 function! s:suite.onBufWriteCmd()
   " TODO
   call s:assert.skip('TODO: vmock cant work with variable args.')

@@ -7,6 +7,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+" open slack buffer
+" Arguments: [bufname] slack buffer name
+function! slack_files#autocmd#onBufReadCmd(bufname) "{{{
+  let info = slack_files#util#bufname2info(a:bufname)
+  call slack_files#open(info.url, info.id, info.filetype, info.title)
+endfunction "}}}
+
 " upload slack buffer
 " Arguments: [bufname] slack buffer name
 function! slack_files#autocmd#onBufWriteCmd(bufname) abort "{{{

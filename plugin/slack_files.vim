@@ -25,6 +25,7 @@ command! -bar CtrlPSlackFiles call ctrlp#init(ctrlp#slack_files#id())
 " Autocommand
 augroup slack_files_write_file
   autocmd!
+  exe printf('autocmd BufReadCmd %s* call slack_files#autocmd#onBufReadCmd(expand("%%"))', slack_files#util#prefix_bufname())
   exe printf('autocmd BufWriteCmd %s* call slack_files#autocmd#onBufWriteCmd(expand("%%"))', slack_files#util#prefix_bufname())
 augroup END
 
