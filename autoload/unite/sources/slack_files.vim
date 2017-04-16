@@ -7,10 +7,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:unite_source = {
-\   'name': 'slack_files',
-\}
-function! s:unite_source.gather_candidates(args, context) "{{{
+function! unite#sources#slack_files#gather_candidates(args, context) dict "{{{
   let files = slack_files#api#files#list().files
   call sort(files, 'slack_files#util#sort_slack_files')
   return map(files, '{
@@ -20,8 +17,12 @@ function! s:unite_source.gather_candidates(args, context) "{{{
   \   "action__path": slack_files#util#info2bufname(v:val.url_private, v:val.id, v:val.filetype, v:val.title),
   \}')
 endfunction "}}}
+
 function! unite#sources#slack_files#define() "{{{
-  return s:unite_source
+  return {
+  \ 'name': 'slack_files',
+  \ 'gather_candidates': function('unite#sources#slack_files#gather_candidates'),
+  \}
 endfunction "}}}
 
 
