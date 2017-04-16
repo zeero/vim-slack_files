@@ -62,7 +62,8 @@ endfunction "}}}
 " get token
 " Return: Slack API token String
 function! slack_files#common#get_token() abort "{{{
-  let token_file = g:slack_files#token_file
+  let token_file = slack_files#token_file()
+  let token_dir = fnamemodify(token_file, ':h')
 
   if filereadable(token_file)
     for line in readfile(token_file)
@@ -72,8 +73,8 @@ function! slack_files#common#get_token() abort "{{{
   else
     let token = input('Slack API Token: ')
     call slack_files#api#auth#test(token)
-    if ! isdirectory(g:slack_files#token_file)
-      call mkdir(g:slack_files#token_file, 'p')
+    if ! isdirectory(token_dir)
+      call mkdir(token_dir, 'p')
     endif
     call writefile([token], token_file)
     return token
