@@ -104,7 +104,6 @@ function! s:suite.accept()
   let str = printf("%s\t<%s>\t%s\t%s", title, filetype, url, id)
 
   try
-    call vmock#mock('ctrlp#exit').once()
     call vmock#mock('slack_files#util#info2bufname').with(url, id, filetype, title).return('mock_value').once()
     call ctrlp#slack_files#accept(mode, str)
     

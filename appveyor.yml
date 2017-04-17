@@ -11,8 +11,7 @@ environment:
 install:
 - ps: |
     git clone --quiet https://github.com/thinca/vim-themis.git themis
-    git clone --quiet https://github.com/zeero/vmock vmock
-    git clone --quiet https://github.com/ctrlpvim/ctrlp.vim ctrlp.vim
+    git clone --quiet https://github.com/kannokanno/vmock vmock
     $zip = $Env:APPVEYOR_BUILD_FOLDER + '\vim.zip'
     $vim = $Env:APPVEYOR_BUILD_FOLDER + '\vim'
     (New-Object Net.WebClient).DownloadFile($Env:VIM_URL, $zip)
@@ -23,6 +22,6 @@ build: off
 test_script:
 - ps: |
     & $Env:THEMIS_VIM --version
-    .\themis\bin\themis.bat
+    .\themis\bin\themis.bat -r --runtimepath .\vmock --runtimepath .\test\mock\ctrlp.vim
 deploy: off
 
