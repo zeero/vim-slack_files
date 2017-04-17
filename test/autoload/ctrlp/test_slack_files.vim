@@ -8,7 +8,7 @@ endfunction "}}}
 
 function! s:suite.after() "{{{
   exe 'source autoload/slack_files/api/files.vim'
-  " exe 'source autoload/slack_files.vim'
+  exe 'source autoload/slack_files/util.vim'
 endfunction "}}}
 
 function! s:suite.init()
@@ -103,12 +103,9 @@ function! s:suite.accept()
   let id = 'dummy_id'
   let str = printf("%s\t<%s>\t%s\t%s", title, filetype, url, id)
 
-  " TODO
-  call s:assert.skip('TODO: vmock cant work with variable args.')
-
   try
     call vmock#mock('ctrlp#exit').once()
-    call vmock#mock('slack_files#open').with(title, filetype, url, id, {'opener': 'edit'}).return('mock value').once()
+    call vmock#mock('slack_files#util#info2bufname').with(url, id, filetype, title).return('mock_value').once()
     call ctrlp#slack_files#accept(mode, str)
     
     call vmock#verify()

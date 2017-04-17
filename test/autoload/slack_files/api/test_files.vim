@@ -14,7 +14,7 @@ function! s:suite.upload()
   \}
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#api#helper#post').with('files.upload', post_data).return(expected).once()
+    call vmock#mock('slack_files#api#helper#post').with('files.upload', [post_data]).return(expected).once()
     let actual = slack_files#api#files#upload(filename, contents)
     call s:assert.equals(actual, expected)
 
@@ -49,7 +49,7 @@ function! s:suite.upload_with_config()
   \}
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#api#helper#post').with('files.upload', post_data).return(expected).once()
+    call vmock#mock('slack_files#api#helper#post').with('files.upload', [post_data]).return(expected).once()
     let actual = slack_files#api#files#upload(filename, contents, config)
     call s:assert.equals(actual, expected)
 
@@ -64,7 +64,7 @@ endfunction
 function! s:suite.list()
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#api#helper#post').with('files.list', {'types': slack_files#list_types()}).return(expected).once()
+    call vmock#mock('slack_files#api#helper#post').with('files.list', [{'types': slack_files#list_types()}]).return(expected).once()
     let actual = slack_files#api#files#list()
     call s:assert.equals(actual, expected)
 
@@ -80,7 +80,7 @@ function! s:suite.delete()
   let id = 'dummy'
   let expected = 'mock value'
   try
-    call vmock#mock('slack_files#api#helper#post').with('files.delete', {'file': id}).return(expected).once()
+    call vmock#mock('slack_files#api#helper#post').with('files.delete', [{'file': id}]).return(expected).once()
     let actual = slack_files#api#files#delete(id)
     call s:assert.equals(actual, expected)
 

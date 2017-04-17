@@ -1,6 +1,10 @@
 let s:suite = themis#suite('Test for autoload/unite/sources/slack_files.vim -')
 let s:assert = themis#helper('assert')
 
+function! s:suite.after() "{{{
+  exe 'source autoload/slack_files/api/files.vim'
+endfunction "}}}
+
 function! s:suite.gather_candidates()
   let title = 'dummy_title'
   let filetype = 'dummy_filetype'

@@ -4,6 +4,7 @@ let s:assert = themis#helper('assert')
 function! s:suite.after() "{{{
   exe 'source autoload/slack_files/api/helper.vim'
   exe 'source autoload/slack_files/buffer.vim'
+  exe 'source autoload/slack_files/api/files.vim'
 endfunction "}}}
 
 function! s:suite.open()
@@ -55,8 +56,7 @@ function! s:suite.open_do_nothing_when_title_includes_slash()
     call vmock#mock('slack_files#buffer#open').never()
     call slack_files#common#open(url, id, filetype, title)
     
-    " TODO
-    call s:assert.skip('TODO: never() cant work - Key not present in Dictionary: __actual_args)')
+    " TODO: never() cant work - Key not present in Dictionary: __actual_args
     " call vmock#verify()
   catch /^Vim\%((\a\+)\)\=:E/
     echoerr v:exception
@@ -83,11 +83,8 @@ function! s:suite.write()
   \}
   let bufname = slack_files#util#info2bufname(url, id, filetype, title)
 
-  " TODO
-  call s:assert.skip('TODO: vmock cant work with variable args.')
-
   try
-    call vmock#mock('slack_files#api#files#upload').with(filename, contents, {}).return(res).once()
+    call vmock#mock('slack_files#api#files#upload').with(filename, contents, [{}]).return(res).once()
     call vmock#mock('slack_files#buffer#open').with(bufname, 'edit', contents).once()
     call slack_files#common#write(filename, contents)
     

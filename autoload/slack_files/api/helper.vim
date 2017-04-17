@@ -11,6 +11,7 @@ set cpo&vim
 let s:V = vital#slack_files#new()
 let s:HTTP = s:V.import('Web.HTTP')
 let s:JSON = s:V.import('Web.JSON')
+let s:http_client = ['curl', 'wget', 'python']
 
 " Const
 let s:SLACK_API_DOMAIN = 'https://slack.com/api/'
@@ -31,6 +32,7 @@ function! slack_files#api#helper#post(path, ...) abort "{{{
   let req.url = s:SLACK_API_DOMAIN . a:path
   let req.method = 'post'
   let req.data = s:HTTP.encodeURI(data)
+  let req.client = s:http_client
 
   let res = s:HTTP.request(req)
   return s:parse_response(res)
@@ -45,6 +47,7 @@ function! slack_files#api#helper#get(url) abort "{{{
   let req.method = 'get'
   let req.headers = {}
   let req.headers.Authorization = printf('Bearer %s', slack_files#common#get_token())
+  let req.client = s:http_client
 
   let res = s:HTTP.request(req)
   call s:check_http_status(res)
@@ -73,7 +76,7 @@ endfunction "}}}
 function! s:check_http_status(res) abort "{{{
   if ! (a:res.success || count(a:res.allHeaders, 'HTTP/2 200 '))
     echomsg string(a:res)
-    throw 'slack_files: Slack API network error'
+    throw printf('slack_files: Slack API network error (%s)', a:res.status)
   endif
 endfunction "}}}
 

@@ -8,7 +8,7 @@ endfunction "}}}
 function! s:suite.test()
   let token = 'dummy'
   try
-    call vmock#mock('slack_files#api#helper#post').with('auth.test', {'token': token}).return('mock value').once()
+    call vmock#mock('slack_files#api#helper#post').with('auth.test', [{'token': token}]).return('mock value').once()
     call slack_files#api#auth#test(token)
     call s:assert.true(1)
 
