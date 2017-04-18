@@ -18,7 +18,7 @@ command! -bar CtrlPSlackFiles call ctrlp#init(ctrlp#slack_files#id())
 
 " Keymaps
 
-" Autocommand
+" Autocmds
 augroup slack_files
   autocmd!
   exe printf('autocmd BufReadCmd %s* call slack_files#autocmd#onBufReadCmd(expand("%%"))', slack_files#util#prefix_bufname())

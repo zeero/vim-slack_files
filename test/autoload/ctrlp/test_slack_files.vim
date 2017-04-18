@@ -115,3 +115,20 @@ function! s:suite.accept()
   endtry
 endfunction
 
+function! s:suite.wipe()
+  let entries = ["foo\tbar\tbaz\tid", "oof\trab\tzab\tid"]
+  let expected = 'mock value'
+  try
+    call vmock#mock('slack_files#api#files#delete').with('id').times(2)
+    call vmock#mock('ctrlp#slack_files#init').return(expected).once()
+    let actual = ctrlp#slack_files#wipe(entries)
+    call s:assert.equals(actual, expected)
+    
+    call vmock#verify()
+  catch
+    echoerr v:exception
+  finally
+    call vmock#clear()
+  endtry
+endfunction
+

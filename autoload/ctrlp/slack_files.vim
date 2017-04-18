@@ -73,7 +73,7 @@ call add(g:ctrlp_ext_vars, {
 "
 " Return: a Vim's List
 "
-function! ctrlp#slack_files#init() "{{{
+function! ctrlp#slack_files#init() abort "{{{
   let files = slack_files#api#files#list().files
   call sort(files, 'slack_files#util#sort_slack_files')
 
@@ -106,7 +106,7 @@ endfunction "}}}
 "           the values are 'e', 'v', 't' and 'h', respectively
 "  a:str    the selected string
 "
-function! ctrlp#slack_files#accept(mode, str) "{{{
+function! ctrlp#slack_files#accept(mode, str) abort "{{{
   call ctrlp#exit()
 
   let opener = {
@@ -129,7 +129,7 @@ endfunction "}}}
 " Arguments:
 "  a:entries   List of the selected string
 "
-function! ctrlp#slack_files#wipe(entries) "{{{
+function! ctrlp#slack_files#wipe(entries) abort "{{{
   for item in a:entries
     let strs = split(item, '\t')
     let id = get(strs, 3)
@@ -140,17 +140,17 @@ endfunction "}}}
 
 
 " (optional) Do something before enterting ctrlp
-function! ctrlp#slack_files#enter() "{{{
+function! ctrlp#slack_files#enter() abort "{{{
 endfunction "}}}
 
 
 " (optional) Do something after exiting ctrlp
-function! ctrlp#slack_files#exit() "{{{
+function! ctrlp#slack_files#exit() abort "{{{
 endfunction "}}}
 
 
 " (optional) Set or check for user options specific to this extension
-function! ctrlp#slack_files#opts() "{{{
+function! ctrlp#slack_files#opts() abort "{{{
 endfunction "}}}
 
 
@@ -158,7 +158,7 @@ endfunction "}}}
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
 
 " Allow it to be called later
-function! ctrlp#slack_files#id() "{{{
+function! ctrlp#slack_files#id() abort "{{{
   return s:id
 endfunction "}}}
 
