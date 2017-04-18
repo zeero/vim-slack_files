@@ -1,7 +1,10 @@
 before_script:
+  - git clone https://github.com/haya14busa/go-vimlparser /tmp/go-vimlparser
+  - git clone https://github.com/syngan/vim-vimlint /tmp/vim-vimlint
   - git clone https://github.com/thinca/vim-themis /tmp/vim-themis
   - git clone https://github.com/kannokanno/vmock /tmp/vmock
 script:
+  - "/tmp/vim-vimlint/bin/vimlint.sh -l /tmp/vim-vimlint -p /tmp/go-vimlparser -e EVL103=1 -e EVL102=1 autoload"
   - "/tmp/vim-themis/bin/themis -r --runtimepath /tmp/vmock --runtimepath test/mock/ctrlp.vim"
 notifications:
   slack:
