@@ -31,7 +31,7 @@ function! slack_files#command#upload#call(qargs) abort "{{{
     let config.comment = comment
   endif
   if channels isnot 0
-    let config.channels = chennels
+    let config.channels = channels
   endif
   return slack_files#common#write(filename, contents, config)
 endfunction "}}}

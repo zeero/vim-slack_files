@@ -22,3 +22,35 @@ function! s:suite.call()
     call vmock#clear()
   endtry
 endfunction
+
+function! s:suite.call_with_full_options()
+  let filename = expand('%:t')
+  let contents = getline('0', '$')
+  let expected = 'mock value'
+
+  let channels = 'dummy_channels1,dummy_channels2'
+  let filetype = 'dummy_ft'
+  let comment  = 'dummy_comment'
+
+  let qargs    = printf('--channels=%s --filetype=%s --comment=%s', channels, filetype, comment)
+
+  let expected_config = {
+  \ 'title': expand('%:t'),
+  \ 'channels': channels,
+  \ 'filetype': filetype,
+  \ 'comment': comment,
+  \}
+
+  try
+    call vmock#mock('slack_files#common#write').with(filename, contents, [expected_config]).return(expected).once()
+    let actual = slack_files#command#upload#call(qargs)
+    call s:assert.equals(actual, expected)
+    
+    call vmock#verify()
+  catch
+    echoerr v:exception
+  finally
+    call vmock#clear()
+  endtry
+endfunction
+
