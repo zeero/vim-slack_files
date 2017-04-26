@@ -1,6 +1,6 @@
 " =============================================================================
 " File:          autoload/slack_files.vim
-" Description:   Main Functions
+" Description:   Interface Functions
 " =============================================================================
 
 let s:save_cpo = &cpo

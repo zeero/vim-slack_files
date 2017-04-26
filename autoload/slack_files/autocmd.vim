@@ -9,7 +9,7 @@ set cpo&vim
 
 " open slack buffer
 " Arguments: [bufname] slack buffer name
-function! slack_files#autocmd#onBufReadCmd(bufname) "{{{
+function! slack_files#autocmd#onBufReadCmd(bufname) abort "{{{
   let info = slack_files#util#bufname2info(a:bufname)
   call slack_files#common#open(info.url, info.id, info.filetype, info.title)
 endfunction "}}}

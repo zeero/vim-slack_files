@@ -59,7 +59,7 @@ call add(g:ctrlp_ext_vars, {
   \ 'wipe': 'ctrlp#slack_files#wipe',
   \ 'lname': 'slack_files',
   \ 'sname': 'slack',
-  \ 'type': 'line',
+  \ 'type': 'tabs',
   \ 'enter': 'ctrlp#slack_files#enter()',
   \ 'exit': 'ctrlp#slack_files#exit()',
   \ 'opts': 'ctrlp#slack_files#opts()',
